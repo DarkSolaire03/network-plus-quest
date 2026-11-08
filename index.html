@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network+ Quest — N10-009</title>
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#111826; --panel2:#0d1320; --line:#1f2c44;
+    --green:#3dff8f; --cyan:#38e1ff; --purple:#b78cff; --gold:#ffd34d; --red:#ff5d73;
+    --text:#e8f1ff; --muted:#8fa3c4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:radial-gradient(1200px 600px at 50% -10%, #12233d 0%, var(--bg) 55%); color:var(--text);
+       font-family:"Segoe UI", system-ui, -apple-system, Roboto, sans-serif; min-height:100vh; padding:24px 14px 60px;}
+  .wrap{max-width:860px; margin:0 auto;}
+  header{text-align:center; padding:18px 10px 8px;}
+  .cat{font-size:44px;}
+  h1{font-family:"Consolas","SF Mono",monospace; letter-spacing:2px; font-size:clamp(28px,6vw,44px);
+     color:var(--green); text-shadow:0 0 18px rgba(61,255,143,.45);}
+  .sub{color:var(--cyan); font-family:"Consolas",monospace; letter-spacing:1px; margin-top:4px; font-size:14px;}
+  .hero{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line);
+        border-radius:14px; padding:16px 18px; margin:18px 0 8px;}
+  .hero-top{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:6px;}
+  .rank{font-family:"Consolas",monospace; color:var(--gold); font-size:18px; letter-spacing:1px;}
+  .xp-num{color:var(--muted); font-family:"Consolas",monospace; font-size:13px;}
+  .bar{height:16px; background:#0a0f1a; border:1px solid var(--line); border-radius:99px; overflow:hidden; margin-top:10px;}
+  .bar > div{height:100%; width:0%; background:linear-gradient(90deg,var(--cyan),var(--green));
+             box-shadow:0 0 14px rgba(61,255,143,.55); transition:width .5s ease;}
+  .hero-note{color:var(--muted); font-size:13px; margin-top:10px;}
+  .domain{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line);
+          border-radius:14px; padding:16px 18px; margin-top:16px;}
+  .domain.locked{opacity:.92;}
+  .d-head{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:6px;}
+  .d-title{font-family:"Consolas",monospace; font-size:19px; letter-spacing:.5px;}
+  .d-title .lvl{color:var(--purple);}
+  .weight{color:var(--muted); font-size:12.5px; font-family:"Consolas",monospace;}
+  .d-bar{height:9px; background:#0a0f1a; border:1px solid var(--line); border-radius:99px; overflow:hidden; margin:10px 0 6px;}
+  .d-bar > div{height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--cyan)); transition:width .5s ease;}
+  .badge{font-size:12px; font-family:"Consolas",monospace; color:var(--gold); min-height:16px;}
+  ul.quests{list-style:none; margin-top:8px;}
+  ul.quests li{display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:9px; cursor:pointer; border:1px solid transparent;}
+  ul.quests li:hover{background:#162136; border-color:var(--line);}
+  ul.quests li input{margin-top:3px; width:17px; height:17px; accent-color:var(--green); cursor:pointer; flex:none;}
+  ul.quests li .q{flex:1; font-size:15px; line-height:1.35;}
+  ul.quests li .xp{color:var(--muted); font-family:"Consolas",monospace; font-size:12px; white-space:nowrap; margin-top:2px;}
+  ul.quests li.done .q{color:var(--muted); text-decoration:line-through;}
+  .boss{margin-top:22px; border:1px solid var(--red); border-radius:14px; padding:18px;
+        background:linear-gradient(180deg,#1d1017,#120a10); text-align:center;}
+  .boss h2{font-family:"Consolas",monospace; color:var(--red); letter-spacing:2px; font-size:22px;}
+  .boss p{color:var(--muted); font-size:14px; margin-top:8px; line-height:1.5;}
+  .boss .hp{color:var(--gold); font-family:"Consolas",monospace;}
+  .controls{text-align:center; margin-top:22px;}
+  button.reset{background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:9px;
+       padding:8px 14px; font-family:"Consolas",monospace; cursor:pointer;}
+  button.reset:hover{color:var(--red); border-color:var(--red);}
+  footer{text-align:center; color:var(--muted); font-size:12.5px; margin-top:26px; line-height:1.6;}
+  footer b{color:var(--cyan); font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="cat">🐈‍⬛</div>
+    <h1>NETWORK+ QUEST</h1>
+    <div class="sub">// CompTIA Network+ · Exam N10-009 · A+ &amp; ITF+ already in inventory</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-top">
+      <div class="rank" id="rank">RANK: SCRIPT KIDDIE</div>
+      <div class="xp-num" id="xpNum">0 / 0 XP</div>
+    </div>
+    <div class="bar"><div id="xpBar"></div></div>
+    <p class="hero-note">Clear quests to earn XP. Finish all five realms, then face the final boss. Progress saves in this browser automatically. Pair it with the Professor Messer videos in your NotebookLM notebook — watch a topic, then check off its quest.</p>
+  </section>
+
+  <div id="realms"></div>
+
+  <section class="boss">
+    <h2>⚔ FINAL BOSS: THE N10-009 EXAM ⚔</h2>
+    <p>90 questions max · 90 minutes · multiple choice + hands-on simulations (PBQs) · passing score <span class="hp">720 / 900</span><br>
+    Boss entry fee: ~$369–399 voucher — or possibly <b>free</b> through Ready to Work SA / Project QUEST / WIOA if you qualify.<br>
+    Recommended gear before entering: scoring ~85%+ consistently on full timed practice exams (ExamCompass) and Packet Tracer labs under your belt.</p>
+  </section>
+
+  <div class="controls">
+    <button class="reset" id="resetBtn">Reset all progress</button>
+  </div>
+
+  <footer>
+    Built for Juan's Network+ run · Studying is free — Professor Messer, ExamCompass, Packet Tracer, BiblioTech/SAPL library access.<br>
+    Quest list follows the official CompTIA N10-009 domain objectives.
+  </footer>
+</div>
+
+<script>
+const XP_PER_QUEST = 10;
+const REALMS = [
+  { name:"Networking Concepts", weight:"23% of exam", quests:[
+    "1.1 The OSI model — all 7 layers and what lives at each",
+    "1.2 Networking appliances — routers, switches, firewalls, IDS/IPS, load balancers, proxies",
+    "1.3 Cloud concepts — NFV, VPC, cloud gateways, scalability vs elasticity",
+    "1.4 Ports & protocols — TCP vs UDP and the must-know port numbers",
+    "1.5 Transmission media — cable types, fiber, transceivers, connectors",
+    "1.6 Topologies & network types — star, mesh, spine-leaf, LAN/WAN/MAN, SOHO",
+    "1.7 IPv4 addressing — subnetting, private vs public, APIPA",
+    "1.8 Modern environments — IPv6, SD-WAN, VXLAN, infrastructure as code"
+  ]},
+  { name:"Network Implementation", weight:"20% of exam", quests:[
+    "2.1 Routing technologies — static vs dynamic routes, NAT, route selection",
+    "2.2 Switching features — VLANs, trunking (802.1Q), spanning tree, link aggregation",
+    "2.3 Wireless — 802.11 standards, channels, encryption, antennas, site surveys",
+    "2.4 Physical installs — racks, power (UPS/PDU), environmental controls, cable management"
+  ]},
+  { name:"Network Operations", weight:"19% of exam", quests:[
+    "3.1 Documentation — network diagrams, labeling, asset inventory, IPAM",
+    "3.2 Monitoring — SNMP, syslog, NetFlow, baselines, packet capture",
+    "3.3 Change & config management — change requests, backups, version control",
+    "3.4 Availability — high availability, load balancing, disaster recovery sites, backup types"
+  ]},
+  { name:"Network Security", weight:"14% of exam", quests:[
+    "4.1 Security concepts — CIA triad, zero trust, physical security, IAM basics",
+    "4.2 Attack types — DoS/DDoS, phishing, malware, VLAN hopping, ARP/DNS spoofing",
+    "4.3 Defenses — device hardening, ACLs, network segmentation, port security, 802.1X & MFA"
+  ]},
+  { name:"Network Troubleshooting", weight:"24% of exam", quests:[
+    "5.1 The methodology — identify, theorize, test, plan, implement, verify, document",
+    "5.2 Cabling & physical issues — bad crimps, crosstalk, attenuation, open/short",
+    "5.3 Network services issues — DHCP, DNS, NTP failures and wrong configs",
+    "5.4 Performance issues — latency, jitter, congestion, bandwidth hogs",
+    "5.5 Toolbox — ping, traceroute, nslookup, ipconfig, cable tester, Wi-Fi analyzer"
+  ]}
+];
+const RANKS = [
+  [0,"SCRIPT KIDDIE"],[40,"CABLE RUNNER"],[80,"PACKET SNIFFER"],[120,"SWITCH WHISPERER"],
+  [160,"SUBNET SORCERER"],[200,"NETWORK KNIGHT"],[240,"PACKET PALADIN"]
+];
+const KEY = "netplus-quest-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ state = {}; }
+
+const realmsEl = document.getElementById("realms");
+REALMS.forEach((realm, ri) => {
+  const sec = document.createElement("section");
+  sec.className = "domain";
+  const total = realm.quests.length;
+  sec.innerHTML = `
+    <div class="d-head">
+      <div class="d-title"><span class="lvl">LEVEL ${ri+1}</span> — ${realm.name}</div>
+      <div class="weight">${realm.weight} · <span id="dcount-${ri}"></span></div>
+    </div>
+    <div class="d-bar"><div id="dbar-${ri}"></div></div>
+    <div class="badge" id="dbadge-${ri}"></div>
+    <ul class="quests">
+      ${realm.quests.map((q, qi) => `
+        <li data-r="${ri}" data-q="${qi}">
+          <input type="checkbox" id="q-${ri}-${qi}">
+          <span class="q">${q}</span>
+          <span class="xp">+${XP_PER_QUEST} XP</span>
+        </li>`).join("")}
+    </ul>`;
+  realmsEl.appendChild(sec);
+});
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function render(){
+  let xp = 0, totalQuests = 0;
+  REALMS.forEach((realm, ri) => {
+    let done = 0;
+    realm.quests.forEach((q, qi) => {
+      totalQuests++;
+      const on = !!state[ri + "-" + qi];
+      if (on) { done++; xp += XP_PER_QUEST; }
+      const li = document.querySelector(`li[data-r="${ri}"][data-q="${qi}"]`);
+      const cb = document.getElementById(`q-${ri}-${qi}`);
+      if (cb) cb.checked = on;
+      if (li) li.classList.toggle("done", on);
+    });
+    document.getElementById(`dbar-${ri}`).style.width = (done / realm.quests.length * 100) + "%";
+    document.getElementById(`dcount-${ri}`).textContent = done + " / " + realm.quests.length + " quests";
+    document.getElementById(`dbadge-${ri}`).textContent =
+      done === realm.quests.length ? "★ REALM CLEARED — badge earned ★" : "";
+  });
+  const totalXP = totalQuests * XP_PER_QUEST;
+  document.getElementById("xpNum").textContent = xp + " / " + totalXP + " XP";
+  document.getElementById("xpBar").style.width = (totalXP ? xp / totalXP * 100 : 0) + "%";
+  let rank = RANKS[0][1];
+  RANKS.forEach(r => { if (xp >= r[0]) rank = r[1]; });
+  document.getElementById("rank").textContent = "RANK: " + rank + (xp === totalXP && totalXP > 0 ? " — READY FOR THE BOSS" : "");
+}
+document.querySelectorAll("ul.quests li").forEach(li => {
+  li.addEventListener("click", (e) => {
+    const r = li.dataset.r, q = li.dataset.q, key = r + "-" + q;
+    if (e.target.tagName !== "INPUT") {
+      state[key] = !state[key];
+    } else {
+      state[key] = e.target.checked;
+    }
+    if (!state[key]) delete state[key];
+    save(); render();
+  });
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (confirm("Reset all quest progress?")) { state = {}; save(); render(); }
+});
+render();
+</script>
+</body>
+</html>
